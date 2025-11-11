@@ -1,4 +1,4 @@
-package gm.carlos.bolsos.model;
+package gm.carlos.bolsos.model.base;
 
 import gm.carlos.bolsos.model.enums.Marca;
 import gm.carlos.bolsos.model.enums.Material;
@@ -8,7 +8,6 @@ import java.util.UUID;
 
 public class Producto {
 
-    private String id;
     private double precio;
     private Material materia;
     private double tamano;
@@ -17,8 +16,7 @@ public class Producto {
     private double peso;
     private LocalDate fechaCompra;
 
-    public Producto(String id, double precio, Material materia, double tamano, Marca marca, boolean impermeable, double peso, LocalDate fechaCompra) {
-        this.id = UUID.randomUUID().toString();
+    public Producto(double precio, Material materia, double tamano, Marca marca, boolean impermeable, double peso, LocalDate fechaCompra) {
         this.precio = precio;
         this.materia = materia;
         this.tamano = tamano;
@@ -26,17 +24,6 @@ public class Producto {
         this.impermeable = impermeable;
         this.peso = peso;
         this.fechaCompra = fechaCompra;
-    }
-
-    public Producto(Long id, double precio, String material, double tamano, String marca, boolean impermeable, double peso, LocalDate fechaCompra) {
-    }
-
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
     }
 
     public double getPrecio() {
@@ -93,5 +80,18 @@ public class Producto {
 
     public void setFechaCompra(LocalDate fechaCompra) {
         this.fechaCompra = fechaCompra;
+    }
+
+    @Override
+    public String toString() {
+        return "Producto{" +
+                "precio=" + precio +
+                ", materia=" + materia +
+                ", tamano=" + tamano +
+                ", marca=" + marca +
+                ", impermeable=" + impermeable +
+                ", peso=" + peso +
+                ", fechaCompra=" + fechaCompra +
+                '}';
     }
 }

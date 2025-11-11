@@ -1,6 +1,8 @@
-package gm.carlos.bolsos.model;
+package gm.carlos.bolsos.model.base;
 
 import gm.carlos.bolsos.model.enums.Funcionalidad;
+import gm.carlos.bolsos.model.enums.Marca;
+import gm.carlos.bolsos.model.enums.Material;
 
 import java.time.LocalDate;
 
@@ -8,9 +10,8 @@ public class Bolso extends Producto {
 
     private Funcionalidad funcionalidad;
 
-    public Bolso(Long id, double precio, String material, double tamano, String marca,
-                 boolean impermeable, double peso, LocalDate fechaCompra, Funcionalidad funcionalidad) {
-        super(id, precio, material, tamano, marca, impermeable, peso, fechaCompra);
+    public Bolso(double precio, Material materia, double tamano, Marca marca, boolean impermeable, double peso, LocalDate fechaCompra, Funcionalidad funcionalidad) {
+        super(precio, materia, tamano, marca, impermeable, peso, fechaCompra);
         this.funcionalidad = funcionalidad;
     }
 

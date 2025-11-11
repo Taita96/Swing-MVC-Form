@@ -19,9 +19,7 @@ public class App {
                 public void run() {
                     View vista = new View();
                     ProductoModel model = new ProductoModel();
-                    Controller controller = new Controller();
-                    controller.agregarProducto(model, vista);
-
+                    new Controller(model,vista);
                 }
             });
         } catch (InterruptedException | InvocationTargetException e) {
