@@ -2,21 +2,26 @@ package gm.carlos.bolsos.model.base;
 
 import gm.carlos.bolsos.model.enums.Marca;
 import gm.carlos.bolsos.model.enums.Material;
+import gm.carlos.bolsos.model.enums.TipoProducto;
 
 import java.time.LocalDate;
 import java.util.UUID;
 
 public class Producto {
 
+    private String id;
     private double precio;
     private Material materia;
+    private TipoProducto tipoProducto;
     private double tamano;
     private Marca marca;
     private boolean impermeable;
-    private double peso;
+    private int peso;
     private LocalDate fechaCompra;
 
-    public Producto(double precio, Material materia, double tamano, Marca marca, boolean impermeable, double peso, LocalDate fechaCompra) {
+    public Producto(TipoProducto tipoProducto,double precio, Material materia, double tamano, Marca marca, boolean impermeable, int peso, LocalDate fechaCompra) {
+        this.id = UUID.randomUUID().toString();
+        this.tipoProducto = tipoProducto;
         this.precio = precio;
         this.materia = materia;
         this.tamano = tamano;
@@ -24,6 +29,10 @@ public class Producto {
         this.impermeable = impermeable;
         this.peso = peso;
         this.fechaCompra = fechaCompra;
+    }
+
+    public Producto() {
+        this.id = UUID.randomUUID().toString();
     }
 
     public double getPrecio() {
@@ -66,11 +75,11 @@ public class Producto {
         this.impermeable = impermeable;
     }
 
-    public double getPeso() {
+    public int getPeso() {
         return peso;
     }
 
-    public void setPeso(double peso) {
+    public void setPeso(int peso) {
         this.peso = peso;
     }
 
@@ -82,16 +91,28 @@ public class Producto {
         this.fechaCompra = fechaCompra;
     }
 
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public TipoProducto getTipoProducto() {
+        return tipoProducto;
+    }
+
+    public void setTipoProducto(TipoProducto tipoProducto) {
+        this.tipoProducto = tipoProducto;
+    }
+
     @Override
     public String toString() {
-        return "Producto{" +
-                "precio=" + precio +
-                ", materia=" + materia +
-                ", tamano=" + tamano +
-                ", marca=" + marca +
-                ", impermeable=" + impermeable +
-                ", peso=" + peso +
-                ", fechaCompra=" + fechaCompra +
-                '}';
+        return   "Tipo:" + tipoProducto + " precio: " + precio + " materia: " + materia + " tamano: " + tamano +
+                " marca: " + marca +
+                " impermeable: " + impermeable +
+                " peso: " + peso +
+                " fechaCompra: " + fechaCompra;
     }
 }

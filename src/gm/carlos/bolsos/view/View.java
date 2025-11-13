@@ -6,7 +6,7 @@ import gm.carlos.bolsos.model.enums.*;
 import gm.carlos.bolsos.utilities.Utilities;
 
 import javax.swing.*;
-import java.io.UTFDataFormatException;
+import java.awt.*;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 
@@ -27,12 +27,15 @@ public class View extends JFrame{
     public JButton btnListarProductos;
     public JButton btnAnadirProductos;
     public JButton btnGestionarArchivos;
-    public JButton btnEliminar;
     public JButton btnImportarXML;
     public JButton btnExportarXML;
-    public JButton btnModificar;
     public JButton btnGuardar;
-
+    public JButton btnLimpiar;
+    public JButton btnEliminar;
+    public JButton btnModificar;
+    public JButton btnNuevo;
+    public JButton btnImportarJson;
+    public JButton btnExportarJson;
 
     public JComboBox<TipoProducto> comboboxTipoProducto;
     public JComboBox<Material> comboboxMaterial;
@@ -45,16 +48,16 @@ public class View extends JFrame{
     public JSeparator spSegundo;
 
     public JSpinner spnPrecio;
-    public SpinnerNumberModel modeloPrecio;
+    private SpinnerNumberModel modeloPrecio;
 
     public JLabel lblTipoProducto;
     public JLabel lblMaterial;
     public JLabel lblTipoProductos;
 
-    public ButtonGroup impermebale;
+    private ButtonGroup impermebale;
     public JRadioButton rbSiImpermeable;
     public JRadioButton rbNoImpermeable;
-    public ButtonGroup rueda;
+    private ButtonGroup rueda;
     public JRadioButton rbSiRueda;
     public JRadioButton rbNoRueda;
 
@@ -75,7 +78,7 @@ public class View extends JFrame{
 
         setContentPane(panelPrincipal);
         setLocationRelativeTo(null);
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
         pack();
         setVisible(true);
         asignarBorrarBorderBtn();
@@ -83,7 +86,7 @@ public class View extends JFrame{
 
     }
 
-    private void initComponent(){
+    public void initComponent(){
         comboboxMarca.setModel(new DefaultComboBoxModel<Marca>(Marca.values()));
         comboboxTipoProducto.setModel(new DefaultComboBoxModel<TipoProducto>(TipoProducto.values()));
         comboboxMaterial.setModel(new DefaultComboBoxModel<Material>(Material.values()));
@@ -123,6 +126,11 @@ public class View extends JFrame{
 
         listModel = new DefaultListModel<Producto>();
         listProductos.setModel(listModel);
+
+        panelListarProductos.setVisible(true);
+        panelAnadirProducto.setVisible(false);
+        panelArchivos.setVisible(false);
+
     }
 
 
@@ -131,8 +139,9 @@ public class View extends JFrame{
         Utilities.borrarBordeBoton(btnListarProductos);
         Utilities.borrarBordeBoton(btnAnadirProductos);
         Utilities.borrarBordeBoton(btnGestionarArchivos);
-        Utilities.borrarBordeBoton(btnGuardar);
     }
+
+
 
 
 

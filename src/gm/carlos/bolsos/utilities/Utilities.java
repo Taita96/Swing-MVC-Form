@@ -3,12 +3,15 @@ package gm.carlos.bolsos.utilities;
 import gm.carlos.bolsos.view.View;
 
 import javax.swing.*;
+import javax.swing.filechooser.FileNameExtensionFilter;
 import java.awt.*;
+import java.io.File;
 
 public class Utilities {
 
-    public static void borrarBordeBoton(JButton btn){
+    public static void borrarBordeBoton(JButton btn) {
         btn.setBorder(BorderFactory.createEmptyBorder());
+        btn.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
     }
 
     public static void showMessage(String message, String title, String type) {
@@ -32,21 +35,35 @@ public class Utilities {
         JOptionPane.showMessageDialog(null, message, title, typeJOption);
     }
 
-    public static void configurarComponente(JComponent[] component,boolean switche){
-        for(JComponent c: component){
-            if(c instanceof JRadioButton){
+    public static int mensajeConfirmacion(String mensaje,String titulo) {
+        return JOptionPane.showConfirmDialog(null,mensaje
+                ,titulo,JOptionPane.YES_NO_OPTION);
+    }
+
+    public static void configurarComponente(JComponent[] component, boolean switche) {
+        for (JComponent c : component) {
+            if (c instanceof JRadioButton) {
                 c.setEnabled(switche);
-            }else if(c instanceof JComboBox){
-                c.setEnabled(switche);
-            }else if(c instanceof JComboBox){
+            } else if (c instanceof JComboBox) {
                 c.setEnabled(switche);
             }
         }
     }
 
-    public static void mostrarPantalla(View vista,String nombrePantalla){
-        CardLayout cl = (CardLayout) vista.panelCentral.getLayout();
-        cl.show(vista.panelCentral, nombrePantalla);
+    public static JFileChooser crearSelectorFichero(File rutaDefecto,
+                                                    String tipoArchivos,
+                                                    String extension) {
+        JFileChooser selectorFichero = new JFileChooser();
+        if (rutaDefecto != null) {
+            selectorFichero.setCurrentDirectory(rutaDefecto);
+        }
+        if (extension != null) {
+            FileNameExtensionFilter filtro = new FileNameExtensionFilter(tipoArchivos
+                    , extension);
+            selectorFichero.setFileFilter(filtro);
+        }
+        return selectorFichero;
     }
+
 
 }

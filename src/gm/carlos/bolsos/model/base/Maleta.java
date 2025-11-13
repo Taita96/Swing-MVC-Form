@@ -3,6 +3,7 @@ package gm.carlos.bolsos.model.base;
 import gm.carlos.bolsos.model.enums.Marca;
 import gm.carlos.bolsos.model.enums.Material;
 import gm.carlos.bolsos.model.enums.Seguridad;
+import gm.carlos.bolsos.model.enums.TipoProducto;
 
 import java.time.LocalDate;
 
@@ -12,10 +13,14 @@ public class Maleta extends Producto {
     private boolean ruedas;
 
 
-    public Maleta(double precio, Material materia, double tamano, Marca marca, boolean impermeable, double peso, LocalDate fechaCompra, Seguridad seguridad, boolean ruedas) {
-        super(precio, materia, tamano, marca, impermeable, peso, fechaCompra);
+    public Maleta(TipoProducto tipoProducto, double precio, Material materia, double tamano, Marca marca, boolean impermeable, int peso, LocalDate fechaCompra, Seguridad seguridad,boolean ruedas) {
+        super(tipoProducto, precio, materia, tamano, marca, impermeable, peso, fechaCompra);
         this.seguridad = seguridad;
         this.ruedas = ruedas;
+    }
+
+    public Maleta(){
+
     }
 
     public Seguridad getSeguridad() {
@@ -36,8 +41,7 @@ public class Maleta extends Producto {
 
     @Override
     public String toString() {
-        return "Maleta{" +
-                "seguridad=" + seguridad +
-                '}';
+        return super.toString() +
+                " seguridad: " + seguridad;
     }
 }

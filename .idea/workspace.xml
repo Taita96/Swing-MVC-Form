@@ -2,46 +2,25 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="2248e71e-d995-4cd2-8854-2544134af955" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/resources/buena-eleccion.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/resources/calendario.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/resources/engranajes.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/resources/imagen-de-marca.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/resources/impermeable.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/resources/kilogramo.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/resources/llanta-de-carro.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/resources/material.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/resources/progreso.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/resources/proteger.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/resources/redimensionar.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/resources/signo-de-dolar.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/gm/carlos/bolsos/model/base/BolsoViaje.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/gm/carlos/bolsos/model/base/Maleta.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/gm/carlos/bolsos/model/enums/FuncionAdicional.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/gm/carlos/bolsos/model/enums/Seguridad.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/gm/carlos/bolsos/model/enums/TipoProducto.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/libs/gson-2.10.jar" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/productos.conf" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/libraries/jgoodies_common_1_8_1.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/jgoodies_common_1_8_1.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/Practica1UD1CarlosGonzalez/Hogar.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/Practica1UD1CarlosGonzalez/briefcase.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/Practica1UD1CarlosGonzalez/gm/carlos/bolsos/App$1.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Practica1UD1CarlosGonzalez/gm/carlos/bolsos/App$1.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/Practica1UD1CarlosGonzalez/gm/carlos/bolsos/App.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Practica1UD1CarlosGonzalez/gm/carlos/bolsos/App.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/Practica1UD1CarlosGonzalez/gm/carlos/bolsos/controller/Controller$1.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Practica1UD1CarlosGonzalez/gm/carlos/bolsos/controller/Controller$1.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/out/production/Practica1UD1CarlosGonzalez/gm/carlos/bolsos/controller/Controller.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Practica1UD1CarlosGonzalez/gm/carlos/bolsos/controller/Controller.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/Practica1UD1CarlosGonzalez/gm/carlos/bolsos/model/Bolso.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/Practica1UD1CarlosGonzalez/gm/carlos/bolsos/model/Producto.class" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/out/production/Practica1UD1CarlosGonzalez/gm/carlos/bolsos/model/ProductoModel.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Practica1UD1CarlosGonzalez/gm/carlos/bolsos/model/ProductoModel.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/Practica1UD1CarlosGonzalez/gm/carlos/bolsos/model/base/Bolso.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Practica1UD1CarlosGonzalez/gm/carlos/bolsos/model/base/Bolso.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/Practica1UD1CarlosGonzalez/gm/carlos/bolsos/model/base/BolsoViaje.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Practica1UD1CarlosGonzalez/gm/carlos/bolsos/model/base/BolsoViaje.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/Practica1UD1CarlosGonzalez/gm/carlos/bolsos/model/base/Maleta.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Practica1UD1CarlosGonzalez/gm/carlos/bolsos/model/base/Maleta.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/Practica1UD1CarlosGonzalez/gm/carlos/bolsos/model/base/Producto.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Practica1UD1CarlosGonzalez/gm/carlos/bolsos/model/base/Producto.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/out/production/Practica1UD1CarlosGonzalez/gm/carlos/bolsos/utilities/Utilities.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Practica1UD1CarlosGonzalez/gm/carlos/bolsos/utilities/Utilities.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/out/production/Practica1UD1CarlosGonzalez/gm/carlos/bolsos/view/View.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Practica1UD1CarlosGonzalez/gm/carlos/bolsos/view/View.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/Practica1UD1CarlosGonzalez/shopping-bag-anadir.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/Practica1UD1CarlosGonzalez/suitcases.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/Hogar.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/briefcase.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/shopping-bag-anadir.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/suitcases.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/gm/carlos/bolsos/App.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/gm/carlos/bolsos/App.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/gm/carlos/bolsos/controller/Controller.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/gm/carlos/bolsos/controller/Controller.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/gm/carlos/bolsos/model/Bolso.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/gm/carlos/bolsos/model/base/Bolso.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/gm/carlos/bolsos/model/Producto.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/gm/carlos/bolsos/model/base/Producto.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/gm/carlos/bolsos/model/ProductoModel.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/gm/carlos/bolsos/model/ProductoModel.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/gm/carlos/bolsos/model/base/Bolso.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/gm/carlos/bolsos/model/base/Bolso.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/gm/carlos/bolsos/model/base/BolsoViaje.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/gm/carlos/bolsos/model/base/BolsoViaje.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/gm/carlos/bolsos/model/base/Maleta.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/gm/carlos/bolsos/model/base/Maleta.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/gm/carlos/bolsos/model/base/Producto.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/gm/carlos/bolsos/model/base/Producto.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/gm/carlos/bolsos/utilities/Utilities.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/gm/carlos/bolsos/utilities/Utilities.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/gm/carlos/bolsos/view/View.form" beforeDir="false" afterPath="$PROJECT_DIR$/src/gm/carlos/bolsos/view/View.form" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/gm/carlos/bolsos/view/View.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/gm/carlos/bolsos/view/View.java" afterDir="false" />
@@ -70,7 +49,7 @@
   <component name="PropertiesComponent">
     <property name="ASKED_ADD_EXTERNAL_FILES" value="true" />
     <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
-    <property name="UI_DESIGNER_EDITOR_MODE.UIDesignerToolWindowManager.WIDTH" value="354" />
+    <property name="UI_DESIGNER_EDITOR_MODE.UIDesignerToolWindowManager.WIDTH" value="293" />
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="aspect.path.notification.shown" value="true" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$" />
@@ -87,9 +66,9 @@
   </component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\Users\Alejandro\Documents\ACADEMIA MONTESSORI\InteliJ\Practica1UD1CarlosGonzalez\libs" />
       <recent name="C:\Users\Alejandro\Documents\ACADEMIA MONTESSORI\InteliJ\Practica1UD1CarlosGonzalez\resources" />
       <recent name="C:\Users\Alejandro\Documents\ACADEMIA MONTESSORI\InteliJ\Practica1UD1CarlosGonzalez" />
-      <recent name="C:\Users\Alejandro\Documents\ACADEMIA MONTESSORI\InteliJ\Practica1UD1CarlosGonzalez\libs" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
       <recent name="C:\Users\Alejandro\Documents\ACADEMIA MONTESSORI\InteliJ\Practica1UD1CarlosGonzalez\resources" />
@@ -163,6 +142,13 @@
       <workItem from="1762811379373" duration="4241000" />
       <workItem from="1762863417677" duration="4711000" />
       <workItem from="1762870405862" duration="10183000" />
+      <workItem from="1762947779711" duration="6393000" />
+      <workItem from="1762962167421" duration="10422000" />
+      <workItem from="1762973091346" duration="2095000" />
+      <workItem from="1762986522988" duration="4181000" />
+      <workItem from="1763035025108" duration="6709000" />
+      <workItem from="1763050697451" duration="19000" />
+      <workItem from="1763057413916" duration="3476000" />
     </task>
     <servers />
   </component>

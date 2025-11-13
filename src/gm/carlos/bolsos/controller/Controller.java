@@ -15,22 +15,34 @@ import javax.swing.event.ListSelectionListener;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.WindowEvent;
+import java.awt.event.WindowListener;
+import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
+import java.io.PrintWriter;
 import java.time.LocalDate;
+import java.util.Properties;
 
-public class Controller implements ActionListener, ListSelectionListener {
+public class Controller implements ActionListener, ListSelectionListener, WindowListener {
 
     private View vista;
     private ProductoModel model;
+    private Producto productoSeleccionado;
+    private File ultimaRutaSeleccionada;
 
     public Controller(ProductoModel model, View vista) {
         this.model = model;
         this.vista = vista;
 
+        cargarDatosConfiguracion();
+        addWindowListener(this);
         registrarListener(this);
+        addListSelectionListener(this);
+    }
 
-        vista.panelListarProductos.setVisible(true);
-        vista.panelAnadirProducto.setVisible(false);
-        vista.panelArchivos.setVisible(false);
+    private void addWindowListener(WindowListener listener) {
+        vista.addWindowListener(listener);
     }
 
     @Override
@@ -44,7 +56,21 @@ public class Controller implements ActionListener, ListSelectionListener {
         vista.btnAnadirProductos.addActionListener(e);
         vista.btnListarProductos.addActionListener(e);
         vista.btnGestionarArchivos.addActionListener(e);
+        vista.btnEliminar.addActionListener(e);
+        vista.btnModificar.addActionListener(e);
+        vista.btnNuevo.addActionListener(e);
         vista.btnGuardar.addActionListener(e);
+        vista.btnLimpiar.addActionListener(e);
+
+        vista.btnImportarXML.setActionCommand("importarXML");
+        vista.btnImportarXML.addActionListener(e);
+        vista.btnExportarXML.setActionCommand("exportarXML");
+        vista.btnExportarXML.addActionListener(e);
+
+        vista.btnImportarJson.setActionCommand("importarJSON");
+        vista.btnImportarJson.addActionListener(e);
+        vista.btnExportarJson.setActionCommand("exportarJSON");
+        vista.btnExportarJson.addActionListener(e);
 
         vista.comboboxTipoProducto.setActionCommand("TipoProductoSeleccionado");
         vista.comboboxTipoProducto.addActionListener(e);
@@ -55,9 +81,36 @@ public class Controller implements ActionListener, ListSelectionListener {
         switch (evt) {
             case "Listar Productos":
                 verListaProductos();
+                actualizarLista();
                 break;
             case "Añadir Producto":
                 verAnadirProducto();
+                break;
+            case "importarXML":
+                importarXML();
+                actualizarLista();
+                break;
+            case "exportarXML":
+                exportarXML();
+                break;
+            case "importarJSON":
+                importarJSON();
+                actualizarLista();
+                break;
+            case "exportarJSON":
+                exportarJSON();
+                break;
+            case "Nuevo":
+                verAnadirProducto();
+                break;
+            case "Eliminar":
+                eliminarProducto();
+                break;
+            case "Limpiar":
+                limpiarFormulario();
+                break;
+            case "Modificar":
+                modificarProducto();
                 break;
             case "Gestionar Archivos":
                 verGestionArchivos();
@@ -75,109 +128,191 @@ public class Controller implements ActionListener, ListSelectionListener {
         vista.panelCentral.repaint();
     }
 
+
+
+    private void limpiarFormulario() {
+        vista.comboboxTipoProducto.setSelectedIndex(-1);
+        vista.dpFechaCompra.setDate(LocalDate.now());
+        vista.dpFechaCompra.setEnabled(false);
+        vista.spnPrecio.setValue(1);
+        vista.spnPrecio.setEnabled(false);
+        vista.comboboxMaterial.setSelectedIndex(1);
+        vista.comboboxMaterial.setEnabled(false);
+        vista.txtTamano.setText("");
+        vista.txtTamano.setEnabled(false);
+        vista.comboboxMarca.setSelectedIndex(1);
+        vista.comboboxMarca.setEnabled(false);
+        vista.sliderPeso.setValue(0);
+        vista.sliderPeso.setEnabled(false);
+        vista.rbSiImpermeable.setSelected(false);
+        vista.rbSiImpermeable.setEnabled(false);
+        vista.rbNoImpermeable.setSelected(false);
+        vista.rbNoImpermeable.setEnabled(false);
+
+        //Bolso
+        vista.comboboxFuncionalidadBolso.setEnabled(false);
+        vista.panelBolso.setVisible(false);
+
+        //Bolso Viaje
+        vista.panelBolsoViaje.setVisible(false);
+        vista.comboboxFuncionAdicional.setEnabled(false);
+
+        //Maleta
+        vista.panelMaleta.setVisible(false);
+        vista.comboboxSeguridad.setEnabled(false);
+        vista.rbNoRueda.setEnabled(false);
+        vista.rbNoRueda.setEnabled(false);
+
+
+    }
+
+    private void modificarProducto() {
+        productoSeleccionado = vista.listProductos.getSelectedValue();
+
+        if (productoSeleccionado == null) {
+            Utilities.showMessage("Seleccione un Producto", "Error", "Error");
+            return;
+        }
+
+
+        vista.dpFechaCompra.setDate(productoSeleccionado.getFechaCompra());
+        vista.spnPrecio.setValue(productoSeleccionado.getPrecio());
+        vista.txtTamano.setText(String.valueOf(productoSeleccionado.getTamano()));
+        vista.sliderPeso.setValue((int) productoSeleccionado.getPeso());
+        vista.comboboxTipoProducto.setSelectedItem(productoSeleccionado.getTipoProducto());
+        vista.comboboxMaterial.setSelectedItem(productoSeleccionado.getMateria());
+        vista.comboboxMarca.setSelectedItem(productoSeleccionado.getMarca());
+        vista.rbSiImpermeable.setSelected(productoSeleccionado.isImpermeable());
+        vista.rbNoImpermeable.setSelected(!productoSeleccionado.isImpermeable());
+
+
+        if (productoSeleccionado instanceof Bolso) {
+            vista.comboboxFuncionalidadBolso.setSelectedItem(
+                    ((Bolso) productoSeleccionado).getFuncionalidad());
+        } else if (productoSeleccionado instanceof Maleta) {
+            vista.comboboxSeguridad.setSelectedItem(
+                    ((Maleta) productoSeleccionado).getSeguridad());
+            vista.rbSiRueda.setSelected(((Maleta) productoSeleccionado).isRuedas());
+            vista.rbNoRueda.setSelected(!((Maleta) productoSeleccionado).isRuedas());
+        } else if (productoSeleccionado instanceof BolsoViaje) {
+            vista.comboboxFuncionAdicional.setSelectedItem(
+                    ((BolsoViaje) productoSeleccionado).getFuncionAdicional());
+        }
+
+        verAnadirProducto();
+    }
+
     private void guardarArchivo() {
 
         TipoProducto tipoProdcuto = (TipoProducto) vista.comboboxTipoProducto.getSelectedItem();
-
-        if(vista.comboboxTipoProducto.getSelectedIndex() == -1){
-            Utilities.showMessage("Seleccione un tipo de producto", "Error", "ERROR");
-            vista.comboboxTipoProducto.requestFocus();
-            return;
-        }
 
         Material material = (Material) vista.comboboxMaterial.getSelectedItem();
         Marca marca = (Marca) vista.comboboxMarca.getSelectedItem();
 
         LocalDate fecha = vista.dpFechaCompra.getDate();
-        Object spinnerPrecio = vista.spnPrecio.getValue();
+        Double spinnerPrecio = (Double) vista.spnPrecio.getValue();
         String stringTamano = vista.txtTamano.getText();
         int peso = vista.sliderPeso.getValue();
 
         boolean impeableSiSeleccionado = vista.rbSiImpermeable.isSelected();
         boolean impeableN0Seleccionado = vista.rbNoImpermeable.isSelected();
 
-        ComprobacionDeCamposGenerales(tipoProdcuto, material, marca, fecha, spinnerPrecio, stringTamano, peso, impeableSiSeleccionado, impeableN0Seleccionado);
+        boolean valido = ComprobacionDeCamposGenerales(material, marca, fecha,
+                spinnerPrecio, stringTamano, peso,
+                impeableSiSeleccionado, impeableN0Seleccionado
+        );
 
-        boolean isImpermable = impeableSiSeleccionado ? true : false;
+        if (!valido) {
+            return;
+        }
 
-        double tamano = 0;
 
-        if (!stringTamano.isEmpty()) {
-            try {
-                tamano = Double.parseDouble(stringTamano);
-            } catch (NumberFormatException e) {
-                System.out.println("Problema tamaño" + e.getMessage());
+        double tamano = Double.parseDouble(stringTamano);
+        double precio = spinnerPrecio;
+
+
+        if (productoSeleccionado == null) {
+            switch (tipoProdcuto) {
+                case BOLSO:
+                    Funcionalidad funcionalidad = (Funcionalidad) vista.comboboxFuncionalidadBolso.getSelectedItem();
+
+                    if (funcionalidad == null) {
+                        Utilities.showMessage("Seleccione un Funcionalidad del Bolso", "Error", "ERROR");
+                        vista.comboboxFuncionalidadBolso.requestFocus();
+                        return;
+                    }
+                    model.altaBolso(tipoProdcuto, precio, material, tamano, marca, impeableSiSeleccionado, peso, fecha, funcionalidad);
+                    break;
+                case MALETA:
+
+                    Seguridad seguridad = (Seguridad) vista.comboboxSeguridad.getSelectedItem();
+                    boolean siTieneRueda = vista.rbSiRueda.isSelected();
+                    boolean noTieneRueda = vista.rbNoRueda.isSelected();
+
+                    if (seguridad == null) {
+                        Utilities.showMessage("Seleccione un tipo de seguridad", "Error", "ERROR");
+                        vista.comboboxSeguridad.requestFocus();
+                        return;
+                    }
+
+                    if (!siTieneRueda && !noTieneRueda) {
+                        Utilities.showMessage("Seleccione si tiene ruedas", "Error", "ERROR");
+                        vista.comboboxSeguridad.requestFocus();
+                        return;
+                    }
+                    model.altaMaleta(tipoProdcuto, precio, material, tamano, marca, impeableSiSeleccionado, peso, fecha, seguridad, siTieneRueda);
+                    break;
+                case BOLSOVIAJE:
+                    FuncionAdicional funcionAdicional = (FuncionAdicional) vista.comboboxFuncionAdicional.getSelectedItem();
+
+                    if (funcionAdicional == null) {
+                        Utilities.showMessage("Seleccione un Funcionalidad del Bolso de Viaje", "Error", "ERROR");
+                        vista.comboboxFuncionAdicional.requestFocus();
+                        return;
+                    }
+                    model.altaBolsoViaje(tipoProdcuto, precio, material, tamano, marca, impeableSiSeleccionado, peso, fecha, funcionAdicional);
+                    break;
             }
-        }
+            Utilities.showMessage("Producto Guardado", "Informacion", "INFORMATION");
+        } else {
+            productoSeleccionado.setTipoProducto(tipoProdcuto);
+            productoSeleccionado.setFechaCompra(fecha);
+            productoSeleccionado.setPrecio(precio);
+            productoSeleccionado.setMarca(marca);
+            productoSeleccionado.setTamano(tamano);
+            productoSeleccionado.setMateria(material);
+            productoSeleccionado.setPeso(peso);
+            productoSeleccionado.setImpermeable(impeableSiSeleccionado);
 
 
-        double precio = 0;
-        try {
-            precio = (double) spinnerPrecio;
-        } catch (NumberFormatException e) {
-            System.out.println("Problema precio");
-        }
-
-
-        Bolso nuevoBolso = null;
-        BolsoViaje nuevoBolsoVaije = null;
-        Maleta nuevaMaleta = null;
-
-
-        switch (tipoProdcuto) {
-            case BOLSO:
+            if (productoSeleccionado instanceof Bolso) {
                 Funcionalidad funcionalidad = (Funcionalidad) vista.comboboxFuncionalidadBolso.getSelectedItem();
+                ((Bolso) productoSeleccionado).setFuncionalidad(funcionalidad);
+            } else if (productoSeleccionado instanceof BolsoViaje) {
 
-                if (funcionalidad == null) {
-                    Utilities.showMessage("Seleccione un Funcionalidad del Bolso", "Error", "ERROR");
-                    vista.comboboxFuncionalidadBolso.requestFocus();
-                    return;
-                }
-                nuevoBolso = new Bolso(precio, material, tamano, marca, isImpermable, peso, fecha, funcionalidad);
-                break;
-            case MALETA:
-
+                FuncionAdicional funcionAdicional = (FuncionAdicional) vista.comboboxFuncionAdicional.getSelectedItem();
+                ((BolsoViaje) productoSeleccionado).setFuncionAdicional(funcionAdicional);
+            } else if (productoSeleccionado instanceof Maleta) {
                 Seguridad seguridad = (Seguridad) vista.comboboxSeguridad.getSelectedItem();
                 boolean siTieneRueda = vista.rbSiRueda.isSelected();
-                boolean noTieneRueda = vista.rbNoRueda.isSelected();
 
-                if (seguridad == null) {
-                    Utilities.showMessage("Seleccione un tipo de seguridad", "Error", "ERROR");
-                    vista.comboboxSeguridad.requestFocus();
-                    return;
-                }
+                ((Maleta) productoSeleccionado).setSeguridad(seguridad);
+                ((Maleta) productoSeleccionado).setRuedas(siTieneRueda);
+            }
 
-                if (!siTieneRueda && !noTieneRueda) {
-                    Utilities.showMessage("Seleccione un tipo de seguridad", "Error", "ERROR");
-                    vista.comboboxSeguridad.requestFocus();
-                    return;
-                }
-
-                boolean isRuedaSeleccionada = siTieneRueda ? true : false;
-
-                nuevaMaleta = new Maleta(precio, material, tamano, marca, isImpermable, peso, fecha, seguridad, isRuedaSeleccionada);
-
-                break;
-            case BOLSOVIAJE:
-                FuncionAdicional funcionAdicional = (FuncionAdicional) vista.comboboxFuncionAdicional.getSelectedItem();
-
-                if (funcionAdicional == null) {
-                    Utilities.showMessage("Seleccione un Funcionalidad del Bolso de Viaje", "Error", "ERROR");
-                    vista.comboboxFuncionAdicional.requestFocus();
-                    return;
-                }
-
-                nuevoBolsoVaije = new BolsoViaje(precio, material, tamano, marca, isImpermable, peso, fecha, funcionAdicional);
-                break;
+            model.actualizarReserva(productoSeleccionado);
+            Utilities.showMessage("Producto Actualizado", "Informacion", "INFORMATION");
         }
 
-
+        limpiarFormulario();
+        actualizarLista();
+        verListaProductos();
     }
 
     private void verAnadirProducto() {
         CardLayout cl = (CardLayout) vista.panelCentral.getLayout();
         cl.show(vista.panelCentral, "formulario");
-//        actualizarTabla();
+        actualizarLista();
     }
 
     private void verListaProductos() {
@@ -202,125 +337,267 @@ public class Controller implements ActionListener, ListSelectionListener {
         vista.txtTamano.setEnabled(true);
 
         TipoProducto tipoProdcuto = (TipoProducto) vista.comboboxTipoProducto.getSelectedItem();
-        vista.lblTipoProductos.setVisible(true);
-        switch (tipoProdcuto) {
-            case BOLSO:
-                vista.lblTipoProductos.setText("Añadir Bolso");
 
-                //Bolso
-                vista.comboboxFuncionalidadBolso.setEnabled(true);
-                vista.panelBolso.setVisible(true);
+        if (tipoProdcuto != null) {
+            vista.lblTipoProductos.setVisible(true);
+            switch (tipoProdcuto) {
+                case BOLSO:
+                    vista.lblTipoProductos.setText("Añadir Bolso");
 
-                //Bolso Viaje
-                vista.panelBolsoViaje.setVisible(false);
-                vista.comboboxFuncionAdicional.setEnabled(false);
+                    //Bolso
+                    vista.comboboxFuncionalidadBolso.setEnabled(true);
+                    vista.panelBolso.setVisible(true);
 
-                //Maleta
-                vista.panelMaleta.setVisible(false);
-                vista.comboboxSeguridad.setEnabled(false);
-                vista.rbNoRueda.setEnabled(false);
-                vista.rbNoRueda.setEnabled(false);
-                break;
-            case MALETA:
-                vista.lblTipoProductos.setText("Añadir Maleta");
+                    //Bolso Viaje
+                    vista.panelBolsoViaje.setVisible(false);
+                    vista.comboboxFuncionAdicional.setEnabled(false);
 
-                //Bolso
-                vista.comboboxFuncionalidadBolso.setEnabled(false);
-                vista.panelBolso.setVisible(false);
+                    //Maleta
+                    vista.panelMaleta.setVisible(false);
+                    vista.comboboxSeguridad.setEnabled(false);
+                    vista.rbNoRueda.setEnabled(false);
+                    vista.rbNoRueda.setEnabled(false);
+                    break;
+                case MALETA:
+                    vista.lblTipoProductos.setText("Añadir Maleta");
 
-                //Bolso Viaje
-                vista.panelBolsoViaje.setVisible(false);
-                vista.comboboxFuncionAdicional.setEnabled(false);
+                    //Bolso
+                    vista.comboboxFuncionalidadBolso.setEnabled(false);
+                    vista.panelBolso.setVisible(false);
 
-                //Maleta
-                vista.panelMaleta.setVisible(true);
-                vista.comboboxSeguridad.setEnabled(true);
-                vista.rbNoRueda.setEnabled(true);
-                vista.rbNoRueda.setEnabled(true);
-                break;
-            case BOLSOVIAJE:
-                vista.lblTipoProductos.setText("Añadir Bolso Viaje");
+                    //Bolso Viaje
+                    vista.panelBolsoViaje.setVisible(false);
+                    vista.comboboxFuncionAdicional.setEnabled(false);
 
-                //Bolso
-                vista.comboboxFuncionalidadBolso.setEnabled(false);
-                vista.panelBolso.setVisible(false);
+                    //Maleta
+                    vista.panelMaleta.setVisible(true);
+                    vista.comboboxSeguridad.setEnabled(true);
+                    vista.rbNoRueda.setEnabled(true);
+                    vista.rbNoRueda.setEnabled(true);
+                    break;
+                case BOLSOVIAJE:
+                    vista.lblTipoProductos.setText("Añadir Bolso Viaje");
 
-                //Bolso Viaje
-                vista.panelBolsoViaje.setVisible(true);
-                vista.comboboxFuncionAdicional.setEnabled(true);
+                    //Bolso
+                    vista.comboboxFuncionalidadBolso.setEnabled(false);
+                    vista.panelBolso.setVisible(false);
 
-                //Maleta
-                vista.panelMaleta.setVisible(false);
-                vista.comboboxSeguridad.setEnabled(false);
-                vista.rbNoRueda.setEnabled(false);
-                vista.rbNoRueda.setEnabled(false);
-                break;
+                    //Bolso Viaje
+                    vista.panelBolsoViaje.setVisible(true);
+                    vista.comboboxFuncionAdicional.setEnabled(true);
+
+                    //Maleta
+                    vista.panelMaleta.setVisible(false);
+                    vista.comboboxSeguridad.setEnabled(false);
+                    vista.rbNoRueda.setEnabled(false);
+                    vista.rbNoRueda.setEnabled(false);
+                    break;
+            }
         }
+
     }
 
-    private void ComprobacionDeCamposGenerales(TipoProducto tipoProdcuto, Material material, Marca marca, LocalDate fecha, Object spinnerPrecio, String tamaño, int peso, boolean impeableSiSeleccionado, boolean impeableN0Seleccionado) {
+    private boolean ComprobacionDeCamposGenerales(Material material, Marca marca, LocalDate fecha, Object spinnerPrecio, String tamano, int peso, boolean impeableSiSeleccionado, boolean impeableN0Seleccionado) {
 
-        if (tipoProdcuto == null) {
+        if (vista.comboboxTipoProducto.getSelectedIndex() == -1) {
             Utilities.showMessage("Seleccione un tipo de producto", "Error", "ERROR");
             vista.comboboxTipoProducto.requestFocus();
-            return;
+            return false;
         }
 
         if (fecha == null) {
             Utilities.showMessage("Seleccione una Fecha", "Error", "ERROR");
             vista.dpFechaCompra.requestFocus();
-            return;
+            return false;
         }
 
         if (spinnerPrecio == null) {
             Utilities.showMessage("Fije un precio", "Error", "ERROR");
             vista.spnPrecio.requestFocus();
-            return;
+            return false;
         }
-
 
         if (material == null) {
             Utilities.showMessage("Seleccione un tipo de Material", "Error", "ERROR");
             vista.comboboxMaterial.requestFocus();
-            return;
+            return false;
         }
 
-
-        if (tamaño == null) {
-            Utilities.showMessage("añada el tamaño", "Error", "ERROR");
+        if (tamano == null || tamano.isEmpty()) {
+            Utilities.showMessage("Añada el tamaño", "Error", "ERROR");
             vista.txtTamano.requestFocus();
-            return;
+            return false;
         }
 
-        if (!tamaño.matches("^\\d+$")) {
-            Utilities.showMessage("El campo debe ser numerico", "Error", "ERROR");
+        if (!tamano.matches("^\\d+(\\.\\d+)?$")) {
+            Utilities.showMessage("El tamaño debe ser numérico", "Error", "ERROR");
             vista.txtTamano.requestFocus();
-            return;
+            return false;
         }
-
 
         if (marca == null) {
             Utilities.showMessage("Seleccione un tipo de Marca", "Error", "ERROR");
             vista.comboboxMarca.requestFocus();
-            return;
+            return false;
         }
 
-
-        if (peso == 0) {
-            Utilities.showMessage("Seleccione un peso valido desde ser mayor a 0", "Error", "ERROR");
-            vista.comboboxMarca.requestFocus();
-            return;
+        if (peso <= 0) {
+            Utilities.showMessage("Seleccione un peso válido (mayor a 0)", "Error", "ERROR");
+            vista.sliderPeso.requestFocus();
+            return false;
         }
 
         if (!impeableN0Seleccionado && !impeableSiSeleccionado) {
-            Utilities.showMessage("Verificar campos Impermeable", "Error", "ERROR");
+            Utilities.showMessage("Verifique el campo Impermeable", "Error", "ERROR");
             vista.rbNoImpermeable.requestFocus();
+            return false;
+        }
+
+        return true;
+    }
+
+    private void addListSelectionListener(ListSelectionListener listener) {
+        vista.listProductos.addListSelectionListener(listener);
+    }
+
+    private void actualizarLista() {
+        vista.listModel.clear();
+        for (Producto producto : model.getProductos()) {
+            vista.listModel.addElement(producto);
+        }
+    }
+
+    private void eliminarProducto() {
+        Producto productoSeleccionado = vista.listProductos.getSelectedValue();
+
+        if (productoSeleccionado == null) {
+            Utilities.showMessage("Seleccione un Producto", "Error", "Error");
             return;
+        }
+
+        int index = vista.listProductos.getSelectedIndex();
+        boolean modelEliminada = model.eliminarProducto(productoSeleccionado);
+        vista.listProductos.remove(index);
+        vista.listModel.remove(index);
+    }
+
+    private void cargarDatosConfiguracion() {
+
+        Properties configuracion = new Properties();
+
+        try {
+            configuracion.load(new FileReader("productos.conf"));
+            ultimaRutaSeleccionada = new File(configuracion.getProperty("ultimaRutaSeleccionada"));
+        } catch (IOException e) {
+            Utilities.showMessage(
+                    "El Sistema creara una ruta segura para guardar tus archivos",
+                    "Information",
+                    "INFORMATION"
+            );
+            ultimaRutaSeleccionada = new File(System.getProperty("user.home"));
+        }
+
+    }
+
+    private void actualizarDatosConfiguracion(File ultimaRutaExportada) {
+        this.ultimaRutaSeleccionada = ultimaRutaExportada;
+    }
+
+    private void guardarConfiguracion() {
+        Properties configuracion = new Properties();
+        configuracion.setProperty("ultimaRutaSeleccionada"
+                , ultimaRutaSeleccionada.getAbsolutePath());
+        try {
+            configuracion.store(new PrintWriter("productos.conf")
+                    , "Datos configuracion productos");
+        } catch (IOException e) {
+            Utilities.showMessage(
+                    "No se pudo guardar el archivo de configuración 'productos.conf'.\n" +
+                            "Verifique los permisos de escritura o el espacio disponible en disco.",
+                    "Error al guardar configuración",
+                    "ERROR"
+            );
+        }
+    }
+    private void importarXML() {
+        JFileChooser selectorFichero = Utilities.crearSelectorFichero(ultimaRutaSeleccionada
+                ,"Archivos XML (*.xml)","xml");
+        int opt =selectorFichero.showOpenDialog(null);
+        if (opt==JFileChooser.APPROVE_OPTION) {
+            model.importarXML(selectorFichero.getSelectedFile());
+            actualizarLista();
+            verListaProductos();
+        }
+    }
+
+    private void exportarXML() {
+        JFileChooser selectorFichero2= Utilities.crearSelectorFichero(ultimaRutaSeleccionada
+                ,"Archivos XML (*.xml)","xml");
+        int opt2=selectorFichero2.showSaveDialog(null);
+        if (opt2==JFileChooser.APPROVE_OPTION) {
+            model.exportarXML(selectorFichero2.getSelectedFile());
+        }
+    }
+
+    private void exportarJSON() {
+        JFileChooser selectorFichero = Utilities.crearSelectorFichero(ultimaRutaSeleccionada, "Archivos JSON", "json");
+        int opt = selectorFichero.showSaveDialog(null);
+        if (opt == JFileChooser.APPROVE_OPTION) {
+            model.exportarJSON(selectorFichero.getSelectedFile());
+        }
+    }
+
+    private void importarJSON() {
+        JFileChooser selectorFichero = Utilities.crearSelectorFichero(ultimaRutaSeleccionada, "Archivos JSON", "json");
+        int opt = selectorFichero.showOpenDialog(null);
+        if (opt == JFileChooser.APPROVE_OPTION) {
+            model.importarJSON(selectorFichero.getSelectedFile());
+            actualizarLista();
+            verListaProductos();
         }
     }
 
 
     @Override
     public void valueChanged(ListSelectionEvent e) {
+    }
+
+    @Override
+    public void windowOpened(WindowEvent e) {
+
+    }
+
+    @Override
+    public void windowClosing(WindowEvent e) {
+        int resp= Utilities.mensajeConfirmacion("¿Desea cerrar la ventana?","Salir");
+        if (resp== JOptionPane.OK_OPTION) {
+            guardarConfiguracion();
+            System.exit(0);
+        }
+    }
+
+    @Override
+    public void windowClosed(WindowEvent e) {
+
+    }
+
+    @Override
+    public void windowIconified(WindowEvent e) {
+
+    }
+
+    @Override
+    public void windowDeiconified(WindowEvent e) {
+
+    }
+
+    @Override
+    public void windowActivated(WindowEvent e) {
+
+    }
+
+    @Override
+    public void windowDeactivated(WindowEvent e) {
+
     }
 }
