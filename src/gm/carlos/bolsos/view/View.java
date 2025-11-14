@@ -14,8 +14,6 @@ import java.time.format.DateTimeFormatter;
 public class View extends JFrame{
 
     public JPanel panelPrincipal;
-    public JPanel panelSuperior;
-    public JPanel panelDerecho;
     public JPanel panelCentral;
     public JPanel panelListarProductos;
     public JPanel panelAnadirProducto;
@@ -57,6 +55,7 @@ public class View extends JFrame{
     private ButtonGroup impermebale;
     public JRadioButton rbSiImpermeable;
     public JRadioButton rbNoImpermeable;
+
     private ButtonGroup rueda;
     public JRadioButton rbSiRueda;
     public JRadioButton rbNoRueda;
@@ -75,7 +74,6 @@ public class View extends JFrame{
 
     public View() {
         setTitle("Tienda Bolsos");
-
         setContentPane(panelPrincipal);
         setLocationRelativeTo(null);
         setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
@@ -83,10 +81,9 @@ public class View extends JFrame{
         setVisible(true);
         asignarBorrarBorderBtn();
         initComponent();
-
     }
 
-    public void initComponent(){
+    private void initComponent(){
         comboboxMarca.setModel(new DefaultComboBoxModel<Marca>(Marca.values()));
         comboboxTipoProducto.setModel(new DefaultComboBoxModel<TipoProducto>(TipoProducto.values()));
         comboboxMaterial.setModel(new DefaultComboBoxModel<Material>(Material.values()));

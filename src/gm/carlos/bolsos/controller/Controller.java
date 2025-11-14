@@ -80,28 +80,24 @@ public class Controller implements ActionListener, ListSelectionListener, Window
 
         switch (evt) {
             case "Listar Productos":
-                verListaProductos();
+                Utilities.verPatanllas(vista.panelCentral,"tabla");
                 actualizarLista();
                 break;
             case "Añadir Producto":
-                verAnadirProducto();
+            case "Nuevo":
+                Utilities.verPatanllas(vista.panelCentral,"formulario");
                 break;
             case "importarXML":
                 importarXML();
-                actualizarLista();
                 break;
             case "exportarXML":
                 exportarXML();
                 break;
             case "importarJSON":
                 importarJSON();
-                actualizarLista();
                 break;
             case "exportarJSON":
                 exportarJSON();
-                break;
-            case "Nuevo":
-                verAnadirProducto();
                 break;
             case "Eliminar":
                 eliminarProducto();
@@ -113,7 +109,7 @@ public class Controller implements ActionListener, ListSelectionListener, Window
                 modificarProducto();
                 break;
             case "Gestionar Archivos":
-                verGestionArchivos();
+                Utilities.verPatanllas(vista.panelCentral,"archivos");
                 break;
             case "Guardar":
                 guardarArchivo();
@@ -130,22 +126,31 @@ public class Controller implements ActionListener, ListSelectionListener, Window
 
 
 
+
     private void limpiarFormulario() {
         vista.comboboxTipoProducto.setSelectedIndex(-1);
+        
         vista.dpFechaCompra.setDate(LocalDate.now());
         vista.dpFechaCompra.setEnabled(false);
-        vista.spnPrecio.setValue(1);
+        
+        vista.spnPrecio.setValue((double)0);
         vista.spnPrecio.setEnabled(false);
+        
         vista.comboboxMaterial.setSelectedIndex(1);
         vista.comboboxMaterial.setEnabled(false);
+        
         vista.txtTamano.setText("");
         vista.txtTamano.setEnabled(false);
+        
         vista.comboboxMarca.setSelectedIndex(1);
         vista.comboboxMarca.setEnabled(false);
+        
         vista.sliderPeso.setValue(0);
         vista.sliderPeso.setEnabled(false);
+        
         vista.rbSiImpermeable.setSelected(false);
         vista.rbSiImpermeable.setEnabled(false);
+        
         vista.rbNoImpermeable.setSelected(false);
         vista.rbNoImpermeable.setEnabled(false);
 
@@ -161,7 +166,7 @@ public class Controller implements ActionListener, ListSelectionListener, Window
         vista.panelMaleta.setVisible(false);
         vista.comboboxSeguridad.setEnabled(false);
         vista.rbNoRueda.setEnabled(false);
-        vista.rbNoRueda.setEnabled(false);
+        vista.rbSiRueda.setEnabled(false);
 
 
     }
@@ -199,7 +204,7 @@ public class Controller implements ActionListener, ListSelectionListener, Window
                     ((BolsoViaje) productoSeleccionado).getFuncionAdicional());
         }
 
-        verAnadirProducto();
+        Utilities.verPatanllas(vista.panelCentral,"formulario");
     }
 
     private void guardarArchivo() {
@@ -214,12 +219,12 @@ public class Controller implements ActionListener, ListSelectionListener, Window
         String stringTamano = vista.txtTamano.getText();
         int peso = vista.sliderPeso.getValue();
 
-        boolean impeableSiSeleccionado = vista.rbSiImpermeable.isSelected();
-        boolean impeableN0Seleccionado = vista.rbNoImpermeable.isSelected();
+        boolean esImpermeableSiSeleccionado = vista.rbSiImpermeable.isSelected();
+        boolean esImpermeableNoSeleccionado = vista.rbNoImpermeable.isSelected();
 
         boolean valido = ComprobacionDeCamposGenerales(material, marca, fecha,
                 spinnerPrecio, stringTamano, peso,
-                impeableSiSeleccionado, impeableN0Seleccionado
+                esImpermeableSiSeleccionado, esImpermeableNoSeleccionado
         );
 
         if (!valido) {
@@ -241,7 +246,7 @@ public class Controller implements ActionListener, ListSelectionListener, Window
                         vista.comboboxFuncionalidadBolso.requestFocus();
                         return;
                     }
-                    model.altaBolso(tipoProdcuto, precio, material, tamano, marca, impeableSiSeleccionado, peso, fecha, funcionalidad);
+                    model.altaBolso(tipoProdcuto, precio, material, tamano, marca, esImpermeableSiSeleccionado, peso, fecha, funcionalidad);
                     break;
                 case MALETA:
 
@@ -260,7 +265,7 @@ public class Controller implements ActionListener, ListSelectionListener, Window
                         vista.comboboxSeguridad.requestFocus();
                         return;
                     }
-                    model.altaMaleta(tipoProdcuto, precio, material, tamano, marca, impeableSiSeleccionado, peso, fecha, seguridad, siTieneRueda);
+                    model.altaMaleta(tipoProdcuto, precio, material, tamano, marca, esImpermeableSiSeleccionado, peso, fecha, seguridad, siTieneRueda);
                     break;
                 case BOLSOVIAJE:
                     FuncionAdicional funcionAdicional = (FuncionAdicional) vista.comboboxFuncionAdicional.getSelectedItem();
@@ -270,7 +275,7 @@ public class Controller implements ActionListener, ListSelectionListener, Window
                         vista.comboboxFuncionAdicional.requestFocus();
                         return;
                     }
-                    model.altaBolsoViaje(tipoProdcuto, precio, material, tamano, marca, impeableSiSeleccionado, peso, fecha, funcionAdicional);
+                    model.altaBolsoViaje(tipoProdcuto, precio, material, tamano, marca, esImpermeableSiSeleccionado, peso, fecha, funcionAdicional);
                     break;
             }
             Utilities.showMessage("Producto Guardado", "Informacion", "INFORMATION");
@@ -282,7 +287,7 @@ public class Controller implements ActionListener, ListSelectionListener, Window
             productoSeleccionado.setTamano(tamano);
             productoSeleccionado.setMateria(material);
             productoSeleccionado.setPeso(peso);
-            productoSeleccionado.setImpermeable(impeableSiSeleccionado);
+            productoSeleccionado.setImpermeable(esImpermeableSiSeleccionado);
 
 
             if (productoSeleccionado instanceof Bolso) {
@@ -309,21 +314,13 @@ public class Controller implements ActionListener, ListSelectionListener, Window
         verListaProductos();
     }
 
-    private void verAnadirProducto() {
-        CardLayout cl = (CardLayout) vista.panelCentral.getLayout();
-        cl.show(vista.panelCentral, "formulario");
-        actualizarLista();
-    }
 
     private void verListaProductos() {
         CardLayout cl = (CardLayout) vista.panelCentral.getLayout();
         cl.show(vista.panelCentral, "tabla");
+        actualizarLista();
     }
 
-    private void verGestionArchivos() {
-        CardLayout cl = (CardLayout) vista.panelCentral.getLayout();
-        cl.show(vista.panelCentral, "archivos");
-    }
 
     private void habilitarComponentes() {
         JComboBox[] combos = {vista.comboboxMarca, vista.comboboxMaterial, vista.comboboxFuncionalidadBolso, vista.comboboxSeguridad, vista.comboboxFuncionAdicional};
@@ -411,7 +408,7 @@ public class Controller implements ActionListener, ListSelectionListener, Window
             return false;
         }
 
-        if (spinnerPrecio == null) {
+        if (spinnerPrecio == null || !vista.spnPrecio.isEnabled()) {
             Utilities.showMessage("Fije un precio", "Error", "ERROR");
             vista.spnPrecio.requestFocus();
             return false;
@@ -476,10 +473,20 @@ public class Controller implements ActionListener, ListSelectionListener, Window
         }
 
         int index = vista.listProductos.getSelectedIndex();
-        boolean modelEliminada = model.eliminarProducto(productoSeleccionado);
-        vista.listProductos.remove(index);
-        vista.listModel.remove(index);
+
+        if (index == -1) {
+            Utilities.showMessage("Selecciona un producto para eliminar.", "Error", "ERROR");
+            return;
+        }
+
+        boolean eliminado = model.eliminarProducto(productoSeleccionado);
+
+        if (eliminado) {
+            vista.listModel.remove(index);
+            actualizarLista();
+        }
     }
+
 
     private void cargarDatosConfiguracion() {
 
@@ -524,6 +531,7 @@ public class Controller implements ActionListener, ListSelectionListener, Window
                 ,"Archivos XML (*.xml)","xml");
         int opt =selectorFichero.showOpenDialog(null);
         if (opt==JFileChooser.APPROVE_OPTION) {
+            model.getProductos().clear();
             model.importarXML(selectorFichero.getSelectedFile());
             actualizarLista();
             verListaProductos();
@@ -535,7 +543,9 @@ public class Controller implements ActionListener, ListSelectionListener, Window
                 ,"Archivos XML (*.xml)","xml");
         int opt2=selectorFichero2.showSaveDialog(null);
         if (opt2==JFileChooser.APPROVE_OPTION) {
-            model.exportarXML(selectorFichero2.getSelectedFile());
+            File archivo = selectorFichero2.getSelectedFile();
+            model.exportarXML(archivo);
+            actualizarDatosConfiguracion(archivo.getParentFile());
         }
     }
 
@@ -543,7 +553,9 @@ public class Controller implements ActionListener, ListSelectionListener, Window
         JFileChooser selectorFichero = Utilities.crearSelectorFichero(ultimaRutaSeleccionada, "Archivos JSON", "json");
         int opt = selectorFichero.showSaveDialog(null);
         if (opt == JFileChooser.APPROVE_OPTION) {
-            model.exportarJSON(selectorFichero.getSelectedFile());
+            File archivo = selectorFichero.getSelectedFile();
+            model.exportarJSON(archivo);
+            actualizarDatosConfiguracion(archivo.getParentFile());
         }
     }
 
@@ -551,7 +563,8 @@ public class Controller implements ActionListener, ListSelectionListener, Window
         JFileChooser selectorFichero = Utilities.crearSelectorFichero(ultimaRutaSeleccionada, "Archivos JSON", "json");
         int opt = selectorFichero.showOpenDialog(null);
         if (opt == JFileChooser.APPROVE_OPTION) {
-            model.importarJSON(selectorFichero.getSelectedFile());
+            model.getProductos().clear();
+            model.getProductos().addAll(model.importarJSON(selectorFichero.getSelectedFile()));
             actualizarLista();
             verListaProductos();
         }
@@ -560,6 +573,7 @@ public class Controller implements ActionListener, ListSelectionListener, Window
 
     @Override
     public void valueChanged(ListSelectionEvent e) {
+
     }
 
     @Override

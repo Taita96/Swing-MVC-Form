@@ -9,7 +9,7 @@
     </properties>
     <border type="none"/>
     <children>
-      <grid id="fd248" binding="panelSuperior" layout-manager="FlowLayout" hgap="20" vgap="15" flow-align="0">
+      <grid id="fd248" layout-manager="FlowLayout" hgap="20" vgap="15" flow-align="0">
         <constraints border-constraint="North"/>
         <properties>
           <background color="-2937041"/>
@@ -36,7 +36,7 @@
           </component>
         </children>
       </grid>
-      <grid id="5e283" binding="panelDerecho" layout-manager="GridBagLayout">
+      <grid id="5e283" layout-manager="GridBagLayout">
         <constraints border-constraint="West"/>
         <properties>
           <background color="-2937041"/>

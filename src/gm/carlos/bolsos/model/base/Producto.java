@@ -1,11 +1,26 @@
 package gm.carlos.bolsos.model.base;
 
+import com.fasterxml.jackson.annotation.JsonSubTypes;
+import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import gm.carlos.bolsos.model.enums.Marca;
 import gm.carlos.bolsos.model.enums.Material;
 import gm.carlos.bolsos.model.enums.TipoProducto;
 
 import java.time.LocalDate;
 import java.util.UUID;
+
+@JsonTypeInfo(
+        use = JsonTypeInfo.Id.NAME,
+        include = JsonTypeInfo.As.EXISTING_PROPERTY,
+        property = "tipoProducto",
+        visible = true
+)
+@JsonSubTypes({
+        @JsonSubTypes.Type(value = Bolso.class, name = "BOLSO"),
+        @JsonSubTypes.Type(value = Maleta.class, name = "MALETA"),
+        @JsonSubTypes.Type(value = BolsoViaje.class, name = "BOLSOVIAJE")
+})
+
 
 public class Producto {
 

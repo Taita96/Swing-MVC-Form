@@ -65,5 +65,10 @@ public class Utilities {
         return selectorFichero;
     }
 
+    public static void verPatanllas(JPanel nombrePanel,String nombreTipoPanel){
+        CardLayout cl = (CardLayout) nombrePanel.getLayout();
+        cl.show(nombrePanel, nombreTipoPanel);
+    }
+
 
 }

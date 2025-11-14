@@ -1,8 +1,6 @@
 package gm.carlos.bolsos.model;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-import com.google.gson.reflect.TypeToken;
+import com.fasterxml.jackson.core.type.TypeReference;
 import gm.carlos.bolsos.model.base.Bolso;
 import gm.carlos.bolsos.model.base.BolsoViaje;
 import gm.carlos.bolsos.model.base.Maleta;
@@ -19,14 +17,15 @@ import javax.xml.transform.*;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 import java.io.File;
-import java.io.FileReader;
-import java.io.FileWriter;
 import java.io.IOException;
-import java.lang.reflect.Type;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+
+
+
+
 
 public class ProductoModel {
 
@@ -323,71 +322,27 @@ public class ProductoModel {
 
     }
 
-    public void importarJSON(File fichero) {
-        Gson gson = new Gson();
-
-        try (FileReader lector = new FileReader(fichero)) {
-            List<Producto> listaGenerica = gson.fromJson(lector, new TypeToken<List<Producto>>(){}.getType());
-            productos = new ArrayList<Producto>();
-
-            for (Producto p : listaGenerica) {
-                if (p instanceof Bolso) {
-                    Bolso b = new Bolso();
-                    b.setTipoProducto(p.getTipoProducto());
-                    b.setFechaCompra(p.getFechaCompra());
-                    b.setPrecio(p.getPrecio());
-                    b.setMateria(p.getMateria());
-                    b.setTamano(p.getTamano());
-                    b.setMarca(p.getMarca());
-                    b.setPeso(p.getPeso());
-                    b.setImpermeable(p.isImpermeable());
-                    b.setFuncionalidad(((Bolso) p).getFuncionalidad()); // campo extra de Bolso
-                    productos.add(b);
-
-                } else if (p instanceof BolsoViaje) {
-                    BolsoViaje bv = new BolsoViaje();
-                    bv.setTipoProducto(p.getTipoProducto());
-                    bv.setFechaCompra(p.getFechaCompra());
-                    bv.setPrecio(p.getPrecio());
-                    bv.setMateria(p.getMateria());
-                    bv.setTamano(p.getTamano());
-                    bv.setMarca(p.getMarca());
-                    bv.setPeso(p.getPeso());
-                    bv.setImpermeable(p.isImpermeable());
-                    bv.setFuncionAdicional(((BolsoViaje) p).getFuncionAdicional());
-                    productos.add(bv);
-
-                } else if (p instanceof Maleta) {
-                    Maleta m = new Maleta();
-                    m.setTipoProducto(p.getTipoProducto());
-                    m.setFechaCompra(p.getFechaCompra());
-                    m.setPrecio(p.getPrecio());
-                    m.setMateria(p.getMateria());
-                    m.setTamano(p.getTamano());
-                    m.setMarca(p.getMarca());
-                    m.setPeso(p.getPeso());
-                    m.setImpermeable(p.isImpermeable());
-                    m.setSeguridad(((Maleta) p).getSeguridad());
-                    m.setRuedas(((Maleta) p).isRuedas());
-                    productos.add(m);
-                }
-            }
-
-            Utilities.showMessage("Importación JSON completada correctamente.", "Éxito", "INFORMATION");
-        } catch (IOException e) {
-            Utilities.showMessage("Error al leer el archivo JSON.\nVerifique la ruta y el archivo.", "Error", "ERROR");
+    public List<Producto> importarJSON(File fichero) {
+        try {
+            return JsonManager.mapper.readValue(
+                    fichero,
+                    new TypeReference<List<Producto>>() {}
+            );
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new ArrayList<>();
         }
     }
+
 
 
     public void exportarJSON(File fichero) {
-        Gson gson = new GsonBuilder().setPrettyPrinting().create();
-
-        try (FileWriter fw = new FileWriter(fichero)) {
-            gson.toJson(productos, fw);
-            Utilities.showMessage("Exportación JSON completada correctamente.", "Éxito", "INFORMATION");
-        } catch (IOException e) {
-            Utilities.showMessage("Error al guardar el archivo JSON.\nVerifique la ruta y permisos.", "Error", "ERROR");
+        try {
+            JsonManager.mapper.writeValue(fichero, productos);
+            System.out.println("Productos exportados correctamente.");
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
+
 }
