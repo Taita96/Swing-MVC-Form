@@ -1,6 +1,6 @@
 package gm.carlos.bolsos.model.enums;
 
-public enum Seguridad {
+public enum SeguridadMaleta {
     CADADO,
     CLAVE
 }

@@ -26,7 +26,7 @@ public class Producto {
 
     private String id;
     private double precio;
-    private Material materia;
+    private Material material;
     private TipoProducto tipoProducto;
     private double tamano;
     private Marca marca;
@@ -34,11 +34,11 @@ public class Producto {
     private int peso;
     private LocalDate fechaCompra;
 
-    public Producto(TipoProducto tipoProducto,double precio, Material materia, double tamano, Marca marca, boolean impermeable, int peso, LocalDate fechaCompra) {
+    public Producto(TipoProducto tipoProducto, double precio, Material material, double tamano, Marca marca, boolean impermeable, int peso, LocalDate fechaCompra) {
         this.id = UUID.randomUUID().toString();
         this.tipoProducto = tipoProducto;
         this.precio = precio;
-        this.materia = materia;
+        this.material = material;
         this.tamano = tamano;
         this.marca = marca;
         this.impermeable = impermeable;
@@ -58,12 +58,12 @@ public class Producto {
         this.precio = precio;
     }
 
-    public Material getMateria() {
-        return materia;
+    public Material getMaterial() {
+        return material;
     }
 
-    public void setMateria(Material materia) {
-        this.materia = materia;
+    public void setMaterial(Material material) {
+        this.material = material;
     }
 
     public double getTamano() {
@@ -110,10 +110,6 @@ public class Producto {
         return id;
     }
 
-    public void setId(String id) {
-        this.id = id;
-    }
-
     public TipoProducto getTipoProducto() {
         return tipoProducto;
     }
@@ -124,7 +120,7 @@ public class Producto {
 
     @Override
     public String toString() {
-        return   "Tipo:" + tipoProducto + " precio: " + precio + " materia: " + materia + " tamano: " + tamano +
+        return   "Tipo:" + tipoProducto + " precio: " + precio + " materia: " + material + " tamano: " + tamano +
                 " marca: " + marca +
                 " impermeable: " + impermeable +
                 " peso: " + peso +

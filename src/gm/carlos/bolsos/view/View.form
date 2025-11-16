@@ -440,6 +440,15 @@
                         <properties>
                           <background color="-1"/>
                           <columns value="10"/>
+                          <font name="Arial" size="12" style="1"/>
+                        </properties>
+                      </component>
+                      <component id="42d3d" class="javax.swing.JLabel">
+                        <constraints/>
+                        <properties>
+                          <font name="Arial" size="14" style="1"/>
+                          <foreground color="-16777216"/>
+                          <text value="KG"/>
                         </properties>
                       </component>
                     </children>
@@ -733,7 +742,7 @@
                   </grid>
                 </children>
               </grid>
-              <grid id="47f05" layout-manager="FlowLayout" hgap="5" vgap="5" flow-align="1">
+              <grid id="47f05" layout-manager="FlowLayout" hgap="5" vgap="5" flow-align="0">
                 <constraints>
                   <grid row="12" column="0" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
                   <forms/>

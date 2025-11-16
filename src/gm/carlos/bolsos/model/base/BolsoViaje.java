@@ -1,6 +1,6 @@
 package gm.carlos.bolsos.model.base;
 
-import gm.carlos.bolsos.model.enums.FuncionAdicional;
+import gm.carlos.bolsos.model.enums.FuncionalidadBolsoViaje;
 import gm.carlos.bolsos.model.enums.Marca;
 import gm.carlos.bolsos.model.enums.Material;
 import gm.carlos.bolsos.model.enums.TipoProducto;
@@ -9,27 +9,27 @@ import java.time.LocalDate;
 
 public class BolsoViaje extends  Producto{
 
-    private FuncionAdicional funcionAdicional;
+    private FuncionalidadBolsoViaje funcionalidadBolsoViaje;
 
-    public BolsoViaje(TipoProducto tipoProducto, double precio, Material materia, double tamano, Marca marca, boolean impermeable, int peso, LocalDate fechaCompra, FuncionAdicional funcionAdicional) {
-        super(tipoProducto, precio, materia, tamano, marca, impermeable, peso, fechaCompra);
-        this.funcionAdicional = funcionAdicional;
+    public BolsoViaje(TipoProducto tipoProducto, double precio, Material material, double tamano, Marca marca, boolean impermeable, int peso, LocalDate fechaCompra, FuncionalidadBolsoViaje funcionalidadBolsoViaje) {
+        super(tipoProducto, precio, material, tamano, marca, impermeable, peso, fechaCompra);
+        this.funcionalidadBolsoViaje = funcionalidadBolsoViaje;
     }
 
     public BolsoViaje(){
 
     }
 
-    public FuncionAdicional getFuncionAdicional() {
-        return funcionAdicional;
+    public FuncionalidadBolsoViaje getFuncionalidadBolsoViaje() {
+        return funcionalidadBolsoViaje;
     }
 
-    public void setFuncionAdicional(FuncionAdicional funcionAdicional) {
-        this.funcionAdicional = funcionAdicional;
+    public void setFuncionalidadBolsoViaje(FuncionalidadBolsoViaje funcionalidadBolsoViaje) {
+        this.funcionalidadBolsoViaje = funcionalidadBolsoViaje;
     }
 
     @Override
     public String toString() {
-        return super.toString() + " funcionAdicional: " + funcionAdicional;
+        return super.toString() + " funcionAdicional: " + funcionalidadBolsoViaje;
     }
 }

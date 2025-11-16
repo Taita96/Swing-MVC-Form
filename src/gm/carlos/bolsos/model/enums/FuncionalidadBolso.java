@@ -1,6 +1,6 @@
 package gm.carlos.bolsos.model.enums;
 
-public enum Funcionalidad {
+public enum FuncionalidadBolso {
     MANOS_LIBRES,
     BANDOLERA,
     MOCHILA,
